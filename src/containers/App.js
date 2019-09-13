@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import classes from './App.css';
-import Person from '../components/Persons/Person/Person';
+// import Person from '../components/Persons/Person/Person';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
 // import Radium, { StyleRoot } from 'radium';
@@ -8,27 +8,44 @@ import Cockpit from '../components/Cockpit/Cockpit';
 
 class App extends Component {
 
-  state = {
-    persons : [
-      {
-        id: '324eadasd', 
-        name: "Abhishekh", 
-        age: 24
-      },
-      {
-        id: '324eadase', 
-        name: "Achyuta", 
-        age: 22
-      },
-      {
-        id: '324eadasf', 
-        name: "Mayank", 
-        age: 23
-      },
-    ],
-    otherState : "some other value",
-    showPersons : false,
-  };
+  constructor(props) {
+    super(props);
+    console.log("[App.js] constructor");
+    this.state = {
+      persons : [
+        {
+          id: '324eadasd', 
+          name: "Abhishekh", 
+          age: 24
+        },
+        {
+          id: '324eadase', 
+          name: "Achyuta", 
+          age: 22
+        },
+        {
+          id: '324eadasf', 
+          name: "Mayank", 
+          age: 23
+        },
+      ],
+      otherState : "some other value",
+      showPersons : false,
+    };
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    console.log("[App.js] getDerivedStateFromProps", props);
+    return state;
+  }
+
+  componentWillMount() {
+    console.log("[App.js] ComponentWillMount");
+  }
+
+  componentDidMount() {
+    console.log("[App.js] ComponentDidMount");
+  }
 
   deletePersonHandler = (personIndex) => {
     // const persons = this.state.persons.slice();
@@ -64,19 +81,23 @@ class App extends Component {
   
   render(){
 
+    console.log("[App.js] render");
     let persons = null;
     
     if(this.state.showPersons) {
-      persons = <Persons 
+      persons = (
+        <Persons 
           persons={this.state.persons}
           clicked={this.deletePersonHandler}
           changed={this.nameChangedHandler}
-        />;
+        />
+      );
     }
 
     return (
       <div className={classes.App}>
         <Cockpit 
+          title={this.props.appTitle}
           showPersons={this.state.showPersons}
           persons={this.state.persons}
           clicked={this.togglePersonsHandler}
@@ -91,6 +112,7 @@ class App extends Component {
       </div>
     );
   }
+
   // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Hi, I am a React App.'));
 }
 
