@@ -31,6 +31,7 @@ class App extends Component {
       ],
       otherState : "some other value",
       showPersons : false,
+      showCockpit : true,
     };
   }
 
@@ -39,12 +40,21 @@ class App extends Component {
     return state;
   }
 
-  componentWillMount() {
-    console.log("[App.js] ComponentWillMount");
-  }
+  // componentWillMount() {
+  //   console.log("[App.js] ComponentWillMount");
+  // }
 
   componentDidMount() {
     console.log("[App.js] ComponentDidMount");
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log("[App.js] shouldComponentUpdate");
+    return true;
+  }
+
+  componentDidUpdate() {
+    console.log("[App.js] ComponentDidUpdate");
   }
 
   deletePersonHandler = (personIndex) => {
@@ -96,12 +106,22 @@ class App extends Component {
 
     return (
       <div className={classes.App}>
-        <Cockpit 
-          title={this.props.appTitle}
-          showPersons={this.state.showPersons}
-          persons={this.state.persons}
-          clicked={this.togglePersonsHandler}
-        />
+        <button 
+          onClick={() => {
+            this.setState({ showCockpit : false });
+          }}
+        >
+          Remove Cockpit
+        </button>
+        {
+          this.state.showCockpit ? 
+            <Cockpit 
+              title={this.props.appTitle}
+              showPersons={this.state.showPersons}
+              persons={this.state.persons}
+              clicked={this.togglePersonsHandler}
+            /> : null
+        }
         {/* <h1>Hi, I am a React App.</h1>
         <p className={assignedClasses.join(' ')}>This is really working!</p>
         <button 
