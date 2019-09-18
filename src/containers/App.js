@@ -3,7 +3,8 @@ import classes from './App.css';
 // import Person from '../components/Persons/Person/Person';
 import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
-import WithClass from '../hoc/WithClass';
+import withClass from '../hoc/withClass';
+import Aux from '../hoc/Aux';
 // import Radium, { StyleRoot } from 'radium';
 // import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
@@ -33,6 +34,7 @@ class App extends Component {
       otherState : "some other value",
       showPersons : false,
       showCockpit : true,
+      changeCounter : 0,
     };
   }
 
@@ -80,7 +82,12 @@ class App extends Component {
 
     const persons = [...this.state.persons];
     persons[personIndex] = person;
-    this.setState({persons : persons});
+    this.setState((prevState, props) => {
+      return {
+        persons : persons,
+        changeCounter : prevState.changeCounter + 1,
+      }
+    });
   }
 
   togglePersonsHandler = (event) => {
@@ -106,7 +113,7 @@ class App extends Component {
     }
 
     return (
-      <WithClass classes={classes.App}>
+      <Aux>
         <button 
           onClick={() => {
             this.setState({ showCockpit : false });
@@ -130,11 +137,11 @@ class App extends Component {
           onClick={this.togglePersonsHandler}
         > */}
         {persons}
-      </WithClass>
+      </Aux>
     );
   }
 
   // return React.createElement('div', {className: 'App'}, React.createElement('h1', null, 'Hi, I am a React App.'));
 }
 
-export default App;
+export default withClass(App, classes.App);
