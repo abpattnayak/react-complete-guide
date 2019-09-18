@@ -5,6 +5,7 @@ import Persons from '../components/Persons/Persons';
 import Cockpit from '../components/Cockpit/Cockpit';
 import withClass from '../hoc/withClass';
 import Aux from '../hoc/Aux';
+import AuthContext from '../context/auth-context';
 // import Radium, { StyleRoot } from 'radium';
 // import ErrorBoundary from './ErrorBoundary/ErrorBoundary';
 
@@ -35,6 +36,7 @@ class App extends Component {
       showPersons : false,
       showCockpit : true,
       changeCounter : 0,
+      authenticated: false,
     };
   }
 
@@ -96,6 +98,10 @@ class App extends Component {
       showPersons : !doesShow,
     });
   }
+
+  loginHandler = () => {
+    this.setState({authenticated: true});
+  }
   
   render(){
 
@@ -108,6 +114,7 @@ class App extends Component {
           persons={this.state.persons}
           clicked={this.deletePersonHandler}
           changed={this.nameChangedHandler}
+          isAuthenticated={this.state.authenticated}
         />
       );
     }
@@ -121,6 +128,10 @@ class App extends Component {
         >
           Remove Cockpit
         </button>
+        <AuthContext.Provider value={{
+          authenticated : this.state.authenticated,
+          login : this.loginHandler
+          }}>
         {
           this.state.showCockpit ? 
             <Cockpit 
@@ -130,13 +141,8 @@ class App extends Component {
               clicked={this.togglePersonsHandler}
             /> : null
         }
-        {/* <h1>Hi, I am a React App.</h1>
-        <p className={assignedClasses.join(' ')}>This is really working!</p>
-        <button 
-          className={btnClass}
-          onClick={this.togglePersonsHandler}
-        > */}
         {persons}
+        </AuthContext.Provider>
       </Aux>
     );
   }
